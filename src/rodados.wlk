@@ -1,3 +1,17 @@
+object municipalidad {
+	var caja = 0
+	const valorRodado = 100000
+	const dependencias = new List()
+	method venderRodado(rodado){
+		dependencias.forEach( {
+			dependencia => dependencia.quitarDeFlota(rodado)
+		} )
+		caja = caja + valorRodado
+	}
+	method agregarDependencia(dependencia){
+		dependencias.add(dependencia)
+	}
+}
 class Dependencia {
 	const flotaDeRodados = new List()
 	var empleados
@@ -5,6 +19,9 @@ class Dependencia {
 		flotaDeRodados.add(rodado)
 	}
 	method quitarDeFlota(rodado){
+		if (self.capacidadFaltante() - rodado.capacidad() > 0){
+			throw new DomainException(message="La dependencia no puede quedar con capacidad faltante")
+		}
 		flotaDeRodados.remove(rodado)
 	}
 	method pesoTotalFlota() = flotaDeRodados.sum({rodado => rodado.peso()})
@@ -30,13 +47,13 @@ class Corsa{
 }
 
 object tanqueAdicional{
-	const property capacidad = 4
+	const property capacidad = 3
 	const property peso = 150
 	const property velocidadMaxima = 120
 }
 
 object tanqueComun{
-	const property capacidad = 3
+	const property capacidad = 4
 	const property peso = 0
 	const property velocidadMaxima = 110
 }

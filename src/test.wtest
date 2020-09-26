@@ -1,0 +1,55 @@
+import rodados.*
+
+describe "Tests de rodados"{
+	const medioAmbiente = new Dependencia(empleados=0)
+	const deportes = new Dependencia(empleados=45)
+	const cultura = new Dependencia(empleados=31)
+	const unCorsaRojo = new Corsa(color="rojo")
+	const unCorsaAzul = new Corsa(color="azul")
+	const unCorsaVerde = new Corsa(color="verde")
+	const pepe = new Kwid(tanque=tanqueComun)
+	
+	const cachito = new Corsa(color="rojo")
+	const kwidConTanqueAdicional = new Kwid(tanque=tanqueAdicional)
+	const unAutoEspecial = new AutoEspecial(color="beige", velocidadMaxima=160, peso=1200, capacidad=5)
+	const otroKwidConTanqueAdicional = new Kwid(tanque=tanqueAdicional)
+	const kwidConTanqueComun= new Kwid(tanque=tanqueComun)
+		
+	fixture {
+		medioAmbiente.agregarAFlota(unCorsaRojo)
+		medioAmbiente.agregarAFlota(unCorsaAzul)
+		trafic.configurar(interiorPopular, motorBataton)
+		deportes.agregarAFlota(cachito)
+		deportes.agregarAFlota(kwidConTanqueAdicional)
+		deportes.agregarAFlota(unCorsaVerde)
+		deportes.agregarAFlota(unCorsaAzul)
+		deportes.agregarAFlota(unAutoEspecial)
+
+		cultura.agregarAFlota(cachito)
+		cultura.agregarAFlota(kwidConTanqueAdicional)
+		cultura.agregarAFlota(otroKwidConTanqueAdicional)
+		cultura.agregarAFlota(kwidConTanqueComun)
+				
+	}
+	test "Una dependencia está bien equipada si tiene al menos 3 rodados y todos pueden ir a más de 100 km/h" {
+		medioAmbiente.agregarAFlota(pepe)
+		assert.that(medioAmbiente.estaBienEquipada())
+	}
+	test "Una dependencia no está bien equipada si tiene menos de 3 rodados"{
+		assert.notThat(medioAmbiente.estaBienEquipada())
+	}
+	test "Una dependencia no está bien equipada si tiene algún rodado que va a menos de 100 km/h"{
+		const autoLento = new AutoEspecial(color="rojo", velocidadMaxima=90, peso=1200, capacidad=5)
+		medioAmbiente.agregarAFlota(autoLento)
+		assert.notThat(medioAmbiente.estaBienEquipada())
+	}
+	test "La capacidad de un kwid con tanque comun es 4"{
+		//TODO agregar asserts sobre capacidad de kwid
+	}
+	test "La capacidad faltante de una dependencia se calcula bien"{
+		assert.equals(25,deportes.capacidadFaltante())
+	}
+	//TODO testear que al intentar vender un rodado a una dependencia que queda con capacidad faltante, da error y no lo vende
+
+	
+}
